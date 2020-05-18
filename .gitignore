@@ -61,3 +61,6 @@
 
 #JetBrains
 .idea/
+
+# cmake-debug
+cmake-build-debug/
