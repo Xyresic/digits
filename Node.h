@@ -2,20 +2,37 @@
 #define DIGITS_NODE_H
 
 
+#include <functional>
+#include <vector>
+
+using namespace std;
+
 class Node {
 private:
-    long double weights[10];
+    //calculation parameters
+    vector<long double> weights;
     long double bias;
-    long double actualizer();
-    Node receivers[10];
+    function<long double(long double)> actualizer;
+
+    vector<Node> receivers;
+    long double output;
 
 public:
-    long double inputs[10];
+    vector<long double> inputs;
 
-    Node();
+    Node(function<long double(long double)> actualizer);
     ~Node();
 
+    //getters
+    long double get_output() {return output;}
+
+    //setters
+    void set_receivers(vector<Node> receivers);
+    void set_params(vector<long double> weights, long double bias);
+
+    void add_input(long double input);
     void compute();
+    void propagate();
 };
 
 
