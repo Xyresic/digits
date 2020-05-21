@@ -15,7 +15,7 @@ private:
     function<long double(long double)> actualizer;
 
     vector<Node> receivers;
-    long double output;
+    long double output = 0;
 
 public:
     vector<long double> inputs;

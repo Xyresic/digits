@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Node.h"
 
 Node::Node(function<long double(long double)> actualizer) {
@@ -22,16 +23,15 @@ void Node::add_input(long double input) {
 }
 
 void Node::compute() {
-    for(int i = 0; i < inputs.size(); i++) {
-        output += inputs.back() * weights.back();
-        inputs.pop_back();
-        weights.pop_back();
+    for (int i = 0; i < inputs.size(); i++) {
+        output += inputs[i] * weights[i];
     }
     output = actualizer(output + bias);
+    inputs.clear();
 }
 
 void Node::propagate() {
-    for(Node receiver : receivers) {
+    for (Node receiver : receivers) {
         receiver.inputs.push_back(output);
     }
 }
