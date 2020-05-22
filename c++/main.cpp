@@ -22,6 +22,16 @@ int index(vector<double> vec, double ele) {
     return distance(vec.begin(), find(vec.begin(), vec.end(), ele));
 }
 
+//cost function (quadratic)
+double cost(vector<double> results, vector<double> expected) {
+    double cost = 0;
+    for (int i = 0; i < results.size(); i++) {
+        double diff = results[i] - expected[i];
+        cost += diff * diff;
+    }
+    return cost;
+}
+
 int main() {
     vector<Node> top;
     vector<Node> carriage;
@@ -31,7 +41,6 @@ int main() {
     if (parameters.is_open()) {
         while (getline(parameters, line)) {
             if (line == "" || line == "end") {
-
                 if (carriage.size() != 0) {
                     for (int i = 0; i < top.size(); i++) {
                         top[i].set_receivers(&carriage);
@@ -61,7 +70,6 @@ int main() {
     } else {
         cout << "Unable to open file." << endl;
     }
-
 
     //retrieve inputs
     //get_inputs(); TODO (Simon)
