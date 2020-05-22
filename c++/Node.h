@@ -14,7 +14,7 @@ private:
     double bias;
     function<double(double)> actualizer;
 
-    vector<Node> receivers;
+    vector<Node>* receivers = new vector<Node>;
     double output = 0;
 
 public:
@@ -25,10 +25,10 @@ public:
 
     //getters
     double get_output() {return output;}
-    vector<Node> get_receivers() {return receivers;}
+    vector<Node>* get_receivers() {return receivers;}
 
     //setters
-    void set_receivers(vector<Node> receivers);
+    void set_receivers(vector<Node>* receivers);
     void set_params(vector<double> weights, double bias);
 
     void add_input(double input);

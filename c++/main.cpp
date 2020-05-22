@@ -31,8 +31,11 @@ int main() {
     if (parameters.is_open()) {
         while (getline(parameters, line)) {
             if (line == "" || line == "end") {
-                for (int i = 0; i < top.size(); i++) {
-                    top[i].set_receivers(carriage);
+
+                if (carriage.size() != 0) {
+                    for (int i = 0; i < top.size(); i++) {
+                        top[i].set_receivers(&carriage);
+                    }
                 }
                 if (line != "end") {
                     carriage = top;
@@ -66,18 +69,14 @@ int main() {
         top[i].add_input(1);
     }
 
-    //cout << top.front().get_receivers().size() << endl;
     //propagate forwards
-
     while (!top.front().is_last()) {
         for (int i = 0; i < top.size(); i++) {
             top[i].compute();
             top[i].propagate();
         }
 
-        cout << top.front().get_receivers().front().inputs.back() << endl;
-        cout << top.back().get_receivers().front().inputs.back() << endl;
-        top = top.front().get_receivers();
+        top = *top.front().get_receivers();
     }
 
     //get result

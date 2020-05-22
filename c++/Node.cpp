@@ -10,7 +10,7 @@ Node::~Node() {
 
 }
 
-void Node::set_receivers(vector<Node> receivers) {
+void Node::set_receivers(vector<Node>* receivers) {
     this->receivers = receivers;
 }
 
@@ -24,7 +24,7 @@ void Node::add_input(double input) {
 }
 
 bool Node::is_last() {
-    return receivers.size() == 0;
+    return receivers->size() == 0;
 }
 
 void Node::compute() {
@@ -36,7 +36,7 @@ void Node::compute() {
 }
 
 void Node::propagate() {
-    for (int i = 0; i < receivers.size(); i++) {
-        receivers[i].add_input(output);
+    for (int i = 0; i < receivers->size(); i++) {
+        receivers->at(i).add_input(output);
     }
 }
