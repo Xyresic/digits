@@ -1,7 +1,8 @@
 #include <iostream>
+
 #include "Node.h"
 
-Node::Node(function<long double(long double)> actualizer) {
+Node::Node(function<double(double)> actualizer) {
     this->actualizer = actualizer;
 }
 
@@ -13,13 +14,17 @@ void Node::set_receivers(vector<Node> receivers) {
     this->receivers = receivers;
 }
 
-void Node::set_params(vector<long double> weights, long double bias) {
+void Node::set_params(vector<double> weights, double bias) {
     this->weights = weights;
     this->bias = bias;
 }
 
-void Node::add_input(long double input) {
+void Node::add_input(double input) {
     inputs.push_back(input);
+}
+
+bool Node::is_last() {
+    return receivers.size() == 0;
 }
 
 void Node::compute() {
@@ -31,7 +36,7 @@ void Node::compute() {
 }
 
 void Node::propagate() {
-    for (Node receiver : receivers) {
-        receiver.inputs.push_back(output);
+    for (int i = 0; i < receivers.size(); i++) {
+        receivers[i].add_input(output);
     }
 }

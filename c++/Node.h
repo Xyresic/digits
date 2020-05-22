@@ -10,27 +10,29 @@ using namespace std;
 class Node {
 private:
     //calculation parameters
-    vector<long double> weights;
-    long double bias;
-    function<long double(long double)> actualizer;
+    vector<double> weights;
+    double bias;
+    function<double(double)> actualizer;
 
     vector<Node> receivers;
-    long double output = 0;
+    double output = 0;
 
 public:
-    vector<long double> inputs;
+    vector<double> inputs;
 
-    Node(function<long double(long double)> actualizer);
+    Node(function<double(double)> actualizer);
     ~Node();
 
     //getters
-    long double get_output() {return output;}
+    double get_output() {return output;}
+    vector<Node> get_receivers() {return receivers;}
 
     //setters
     void set_receivers(vector<Node> receivers);
-    void set_params(vector<long double> weights, long double bias);
+    void set_params(vector<double> weights, double bias);
 
-    void add_input(long double input);
+    void add_input(double input);
+    bool is_last();
     void compute();
     void propagate();
 };
