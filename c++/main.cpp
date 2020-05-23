@@ -8,6 +8,7 @@
 using namespace std;
 using namespace std::chrono;
 
+/* neural network */
 //create activator function
 double rectLin(double input) {
     return input * (input > 0);
@@ -16,13 +17,6 @@ function<double(double)> RELU = rectLin;
 //activator derivative
 double reluPrime(double input) {
     return input > 0;
-}
-
-fstream parameters(".\\params.csv");
-
-//get index of element from vector
-int index(vector<double> vec, double ele) {
-    return distance(vec.begin(), find(vec.begin(), vec.end(), ele));
 }
 
 //cost function (quadratic)
@@ -35,9 +29,29 @@ double cost(vector<double> results, vector<double> expected) {
     return cost;
 }
 
+fstream parameters(".\\params.csv");
+
+/* utility */
+//get index of element from vector
+template <class generic>
+int vec_index(vector<generic> vec, generic ele) {
+    return distance(vec.begin(), find(vec.begin(), vec.end(), ele));
+}
+
+/* debug */
+template <class iterable>
+void print_iterable(iterable iter) {
+    string result = "[";
+    for (auto item : iter) {
+        result += to_string(item) + ' ';
+    }
+    cout << result.substr(0, result.size() - 1) << ']' << endl;
+}
+
 int main() {
     vector<Node> top;
     vector<Node> carriage;
+    vector<double> expected;
     string line;
 
     //create network
@@ -94,8 +108,8 @@ int main() {
         top[i].compute(RELU);
         confidences.push_back(top[i].get_output());
     }
-    cout << confidences[0] << endl;
-    cout << index(confidences, *max_element(confidences.begin(), confidences.end()));
+    print_iterable(confidences);
+    cout << vec_index(confidences, *max_element(confidences.begin(), confidences.end()));
 
     //timing execution time
     //auto start = high_resolution_clock::now();
