@@ -15,20 +15,20 @@ private:
 
     vector<double> inputs;
     vector<Node>* receivers = new vector<Node>;
-    double linComb = 0;
+    double lin_comb = 0;
     double output = 0;
 
 public:
     Node(vector<double> weights, double bias);
     ~Node();
 
-    double getOutput() {return output;}
-    vector<Node>* getReceivers() {return receivers;}
+    double get_output() {return output;}
+    vector<Node>* get_receivers() {return receivers;}
 
-    void setReceivers(vector<Node>* receivers);
+    void set_receivers(vector<Node>* receivers);
 
-    void addInput(double input);
-    bool isLast();
+    void add_input(double input);
+    bool is_last();
     void compute(function<double(double)> activator);
     void propagate();
 };

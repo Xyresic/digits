@@ -46,7 +46,7 @@ int main() {
             if (line == "" || line == "end") {
                 if (carriage.size() != 0) {
                     for (int i = 0; i < top.size(); i++) {
-                        top[i].setReceivers(&carriage);
+                        top[i].set_receivers(&carriage);
                     }
                 }
                 if (line != "end") {
@@ -76,23 +76,23 @@ int main() {
     //retrieve inputs
     //get_inputs(); TODO (Simon)
     for (int i = 0; i < top.size(); i++) {
-        top[i].addInput(1);
+        top[i].add_input(1);
     }
 
     //feed forwards
-    while (!top.front().isLast()) {
+    while (!top.front().is_last()) {
         for (int i = 0; i < top.size(); i++) {
             top[i].compute(RELU);
             top[i].propagate();
         }
-        top = *top.front().getReceivers();
+        top = *top.front().get_receivers();
     }
 
     //get result
     vector<double> confidences;
     for (int i = 0; i < top.size(); i++) {
         top[i].compute(RELU);
-        confidences.push_back(top[i].getOutput());
+        confidences.push_back(top[i].get_output());
     }
     cout << confidences[0] << endl;
     cout << index(confidences, *max_element(confidences.begin(), confidences.end()));

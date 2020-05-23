@@ -11,15 +11,15 @@ Node::~Node() {
 
 }
 
-void Node::setReceivers(vector<Node>* receivers) {
+void Node::set_receivers(vector<Node>* receivers) {
     this->receivers = receivers;
 }
 
-void Node::addInput(double input) {
+void Node::add_input(double input) {
     inputs.push_back(input);
 }
 
-bool Node::isLast() {
+bool Node::is_last() {
     return receivers->size() == 0;
 }
 
@@ -27,13 +27,13 @@ void Node::compute(function<double(double)> activator) {
     for (int i = 0; i < inputs.size(); i++) {
         output += inputs[i] * weights[i];
     }
-    linComb = output + bias;
-    output = activator(linComb);
+    lin_comb = output + bias;
+    output = activator(lin_comb);
     inputs.clear();
 }
 
 void Node::propagate() {
     for (int i = 0; i < receivers->size(); i++) {
-        receivers->at(i).addInput(output);
+        receivers->at(i).add_input(output);
     }
 }
