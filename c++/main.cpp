@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <cmath>
 #include <chrono>
 
 #include "Node.h"
@@ -10,13 +11,13 @@ using namespace std::chrono;
 
 /* neural network */
 //create activator function
-double rectLin(double input) {
-    return input * (input > 0);
+double swish(double x) {
+    return x / (1 + exp(-x));
 }
-function<double(double)> RELU = rectLin;
+function<double(double)> sigma = swish;
 //activator derivative
-double reluPrime(double input) {
-    return input > 0;
+double sigma_prime(double x) {
+    return (1 + exp(-x) * (x + 1)) / pow(1 + exp(-x), 2);
 }
 
 //cost function (quadratic)
@@ -96,7 +97,7 @@ int main() {
     //feed forwards
     while (!top.front().is_last()) {
         for (int i = 0; i < top.size(); i++) {
-            top[i].compute(RELU);
+            top[i].compute(sigma);
             top[i].propagate();
         }
         top = *top.front().get_receivers();
@@ -105,11 +106,14 @@ int main() {
     //get result
     vector<double> confidences;
     for (int i = 0; i < top.size(); i++) {
-        top[i].compute(RELU);
+        top[i].compute(sigma);
         confidences.push_back(top[i].get_output());
     }
     print_iterable(confidences);
     cout << vec_index(confidences, *max_element(confidences.begin(), confidences.end()));
+
+    //backpropagation
+
 
     //timing execution time
     //auto start = high_resolution_clock::now();
