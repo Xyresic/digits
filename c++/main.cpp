@@ -8,13 +8,16 @@
 using namespace std;
 using namespace std::chrono;
 
-//create actualization function
-double rectlin(double input) {
-    return input > 0? input:0;
+//create activator function
+double rectLin(double input) {
+    return input * (input > 0);
 }
-function<double(double)> RELU = rectlin;
+function<double(double)> RELU = rectLin;
+//activator derivative
+double reluPrime(double input) {
+    return input > 0;
+}
 
-//read file
 fstream parameters(".\\params.csv");
 
 //get index of element from vector
@@ -43,7 +46,7 @@ int main() {
             if (line == "" || line == "end") {
                 if (carriage.size() != 0) {
                     for (int i = 0; i < top.size(); i++) {
-                        top[i].set_receivers(&carriage);
+                        top[i].setReceivers(&carriage);
                     }
                 }
                 if (line != "end") {
@@ -51,7 +54,6 @@ int main() {
                     top.clear();
                 }
             } else {
-                Node current(RELU);
                 size_t pos;
                 vector<double> weights;
 
@@ -62,7 +64,7 @@ int main() {
                     line = line.substr(pos + 1);
                 }
 
-                current.set_params(weights, bias);
+                Node current(weights, bias);
                 top.push_back(current);
             }
         }
@@ -74,24 +76,23 @@ int main() {
     //retrieve inputs
     //get_inputs(); TODO (Simon)
     for (int i = 0; i < top.size(); i++) {
-        top[i].add_input(1);
+        top[i].addInput(1);
     }
 
-    //propagate forwards
-    while (!top.front().is_last()) {
+    //feed forwards
+    while (!top.front().isLast()) {
         for (int i = 0; i < top.size(); i++) {
-            top[i].compute();
+            top[i].compute(RELU);
             top[i].propagate();
         }
-
-        top = *top.front().get_receivers();
+        top = *top.front().getReceivers();
     }
 
     //get result
     vector<double> confidences;
     for (int i = 0; i < top.size(); i++) {
-        top[i].compute();
-        confidences.push_back(top[i].get_output());
+        top[i].compute(RELU);
+        confidences.push_back(top[i].getOutput());
     }
     cout << confidences[0] << endl;
     cout << index(confidences, *max_element(confidences.begin(), confidences.end()));

@@ -12,28 +12,24 @@ private:
     //calculation parameters
     vector<double> weights;
     double bias;
-    function<double(double)> actualizer;
 
+    vector<double> inputs;
     vector<Node>* receivers = new vector<Node>;
+    double linComb = 0;
     double output = 0;
 
 public:
-    vector<double> inputs;
-
-    Node(function<double(double)> actualizer);
+    Node(vector<double> weights, double bias);
     ~Node();
 
-    //getters
-    double get_output() {return output;}
-    vector<Node>* get_receivers() {return receivers;}
+    double getOutput() {return output;}
+    vector<Node>* getReceivers() {return receivers;}
 
-    //setters
-    void set_receivers(vector<Node>* receivers);
-    void set_params(vector<double> weights, double bias);
+    void setReceivers(vector<Node>* receivers);
 
-    void add_input(double input);
-    bool is_last();
-    void compute();
+    void addInput(double input);
+    bool isLast();
+    void compute(function<double(double)> activator);
     void propagate();
 };
 
