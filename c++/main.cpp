@@ -30,7 +30,7 @@ double cost(const vector<double>& results, const vector<double>& expected) {
     return cost;
 }
 
-fstream parameters(".\\params.csv");
+fstream parameters(".\\params.dat");
 
 /* utility */
 //get index of element from vector
