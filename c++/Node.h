@@ -4,6 +4,7 @@
 
 #include <functional>
 #include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -13,24 +14,27 @@ private:
     vector<double> weights;
     double bias;
 
-    vector<double> inputs;
-    vector<Node>* receivers = new vector<Node>;
-    double lin_comb = 0;
+    vector<shared_ptr<Node>> senders;
+    vector<shared_ptr<Node>> receivers;
+    double input;
+    double lin_comb;
     double output = 0;
 
 public:
-    Node(vector<double> weights, double bias);
-    ~Node();
+    Node(const vector<double>& weights, double bias);
+    ~Node() = default;
 
     double get_output() {return output;}
-    vector<Node>* get_receivers() {return receivers;}
+    double get_lin_comb() {return lin_comb;}
+    vector<shared_ptr<Node>> receiver_ptrs() {return receivers;}
+    vector<shared_ptr<Node>> sender_ptrs() {return senders;}
 
-    void set_receivers(vector<Node>* receivers);
+    void set_input(double input);
+    void set_senders(const vector<shared_ptr<Node>>& senders);
+    void set_receivers(const vector<shared_ptr<Node>>& receivers);
 
-    void add_input(double input);
     bool is_last();
-    void compute(function<double(double)> activator);
-    void propagate();
+    void compute(const function<double(double)>& activator);
 };
 
 

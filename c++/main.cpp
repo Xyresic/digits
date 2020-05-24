@@ -21,7 +21,7 @@ double sigma_prime(double x) {
 }
 
 //cost function (quadratic)
-double cost(vector<double> results, vector<double> expected) {
+double cost(const vector<double>& results, const vector<double>& expected) {
     double cost = 0;
     for (int i = 0; i < results.size(); i++) {
         double diff = results[i] - expected[i];
@@ -35,52 +35,62 @@ fstream parameters(".\\params.csv");
 /* utility */
 //get index of element from vector
 template <class generic>
-int vec_index(vector<generic> vec, generic ele) {
+int vec_index(const vector<generic>& vec, const generic& ele) {
     return distance(vec.begin(), find(vec.begin(), vec.end(), ele));
+}
+
+string to_string(Node input) {
+    return to_string(input.get_output());
 }
 
 /* debug */
 template <class iterable>
-void print_iterable(iterable iter) {
-    string result = "[";
-    for (auto item : iter) {
-        result += to_string(item) + ' ';
+void print_iterable(const iterable& iter) {
+    if (iter.empty()) {
+        cout << "[]" << endl;
+    } else {
+        string result = "[";
+        for (auto item : iter) {
+            result += to_string(item) + ' ';
+        }
+        cout << result.substr(0, result.size() - 1) << ']' << endl;
     }
-    cout << result.substr(0, result.size() - 1) << ']' << endl;
 }
 
 int main() {
-    vector<Node> top;
-    vector<Node> carriage;
+    vector<shared_ptr<Node>> top;
+    vector<shared_ptr<Node>> carriage;
     vector<double> expected;
     string line;
+
+    expected.push_back(1); //test value
 
     //create network
     if (parameters.is_open()) {
         while (getline(parameters, line)) {
-            if (line == "" || line == "end") {
-                if (carriage.size() != 0) {
-                    for (int i = 0; i < top.size(); i++) {
-                        top[i].set_receivers(&carriage);
+            if (line.empty() || line == "end") {
+                if (!top.empty()) {
+                    for (auto& i : carriage) {
+                        i->set_receivers(top);
+                    }
+                    for (auto& i : top) {
+                        i->set_senders(carriage);
                     }
                 }
-                if (line != "end") {
-                    carriage = top;
-                    top.clear();
-                }
+                top = carriage;
+                carriage.clear();
             } else {
                 size_t pos;
                 vector<double> weights;
 
                 double bias = stod(line, &pos);
                 line = line.substr(pos + 1);
-                while (line != "") {
+                while (!line.empty()) {
                     weights.push_back(stod(line, &pos));
                     line = line.substr(pos + 1);
                 }
 
-                Node current(weights, bias);
-                top.push_back(current);
+                carriage.emplace_back(make_shared<Node>(weights, bias));
             }
         }
         parameters.close();
@@ -90,27 +100,30 @@ int main() {
 
     //retrieve inputs
     //get_inputs(); TODO (Simon)
-    for (int i = 0; i < top.size(); i++) {
-        top[i].add_input(1);
+    for (auto& i : top) {
+        i->set_input(1);
     }
 
     //feed forwards
-    while (!top.front().is_last()) {
-        for (int i = 0; i < top.size(); i++) {
-            top[i].compute(sigma);
-            top[i].propagate();
+    while (!top[0]->is_last()) {
+        for (auto& i : top) {
+            i->compute(sigma);
         }
-        top = *top.front().get_receivers();
+        top = top[0]->receiver_ptrs();
     }
 
     //get result
     vector<double> confidences;
-    for (int i = 0; i < top.size(); i++) {
-        top[i].compute(sigma);
-        confidences.push_back(top[i].get_output());
+    for (auto& i : top) {
+        i->compute(sigma);
+        confidences.push_back(i->get_output());
     }
+    cout << "Results: ";
     print_iterable(confidences);
-    cout << vec_index(confidences, *max_element(confidences.begin(), confidences.end()));
+    //cout << vec_index(confidences, *max_element(confidences.begin(), confidences.end())) << endl;
+    cout << "Expected: ";
+    print_iterable(expected);
+    cout << "Cost: " << cost(confidences, expected) << endl;
 
     //backpropagation
 

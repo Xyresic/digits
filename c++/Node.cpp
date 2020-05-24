@@ -2,38 +2,35 @@
 
 #include "Node.h"
 
-Node::Node(vector<double> weights, double bias) {
+Node::Node(const vector<double>& weights, double bias) {
     this->weights = weights;
     this->bias = bias;
 }
 
-Node::~Node() {
-
+void Node::set_input(double input) {
+    this->input = input;
 }
 
-void Node::set_receivers(vector<Node>* receivers) {
+void Node::set_senders(const vector<shared_ptr<Node>>& senders) {
+    this->senders = senders;
+}
+
+void Node::set_receivers(const vector<shared_ptr<Node>>& receivers) {
     this->receivers = receivers;
 }
 
-void Node::add_input(double input) {
-    inputs.push_back(input);
-}
-
 bool Node::is_last() {
-    return receivers->size() == 0;
+    return receivers.empty();
 }
 
-void Node::compute(function<double(double)> activator) {
-    for (int i = 0; i < inputs.size(); i++) {
-        output += inputs[i] * weights[i];
+void Node::compute(const function<double(double)>& activator) {
+    if (!senders.empty()) {
+        for (int i = 0; i < senders.size(); i++) {
+            output += senders[i]->get_output() * weights[i];
+        }
+        lin_comb = output + bias;
+    } else {
+        lin_comb = input * weights[0] + bias;
     }
-    lin_comb = output + bias;
     output = activator(lin_comb);
-    inputs.clear();
-}
-
-void Node::propagate() {
-    for (int i = 0; i < receivers->size(); i++) {
-        receivers->at(i).add_input(output);
-    }
 }
