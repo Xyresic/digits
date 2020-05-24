@@ -2,41 +2,35 @@
 
 #include "Node.h"
 
-Node::Node(function<double(double)> actualizer) {
-    this->actualizer = actualizer;
-}
-
-Node::~Node() {
-
-}
-
-void Node::set_receivers(vector<Node>* receivers) {
-    this->receivers = receivers;
-}
-
-void Node::set_params(vector<double> weights, double bias) {
+Node::Node(const vector<double>& weights, double bias) {
     this->weights = weights;
     this->bias = bias;
 }
 
-void Node::add_input(double input) {
-    inputs.push_back(input);
+void Node::set_input(double input) {
+    this->input = input;
+}
+
+void Node::set_senders(const vector<shared_ptr<Node>>& senders) {
+    this->senders = senders;
+}
+
+void Node::set_receivers(const vector<shared_ptr<Node>>& receivers) {
+    this->receivers = receivers;
 }
 
 bool Node::is_last() {
-    return receivers->size() == 0;
+    return receivers.empty();
 }
 
-void Node::compute() {
-    for (int i = 0; i < inputs.size(); i++) {
-        output += inputs[i] * weights[i];
+void Node::compute(const function<double(double)>& activator) {
+    if (!senders.empty()) {
+        for (int i = 0; i < senders.size(); i++) {
+            output += senders[i]->get_output() * weights[i];
+        }
+        lin_comb = output + bias;
+    } else {
+        lin_comb = input * weights[0] + bias;
     }
-    output = actualizer(output + bias);
-    inputs.clear();
-}
-
-void Node::propagate() {
-    for (int i = 0; i < receivers->size(); i++) {
-        receivers->at(i).add_input(output);
-    }
+    output = activator(lin_comb);
 }
