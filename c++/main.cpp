@@ -16,9 +16,10 @@ double swish(double x) {
 }
 function<double(double)> sigma = swish;
 //activator derivative
-double sigma_prime(double x) {
+double swish_prime(double x) {
     return (1 + exp(-x) * (x + 1)) / pow(1 + exp(-x), 2);
 }
+function<double(double)> sigma_prime = swish_prime;
 
 //cost function (quadratic)
 double cost(const vector<double>& results, const vector<double>& expected) {
@@ -63,7 +64,8 @@ int main() {
     vector<double> expected;
     string line;
 
-    expected.push_back(1); //test value
+    //record expected value TODO (SIMON)
+    expected.push_back(1); //test values
 
     //create network
     if (parameters.is_open()) {
@@ -93,15 +95,15 @@ int main() {
                 carriage.emplace_back(make_shared<Node>(weights, bias));
             }
         }
-        parameters.close();
     } else {
         cout << "Unable to open file." << endl;
+        return 1;
     }
 
-    //retrieve inputs
+    //retrieve inputs from GUI
     //get_inputs(); TODO (Simon)
     for (auto& i : top) {
-        i->set_input(1);
+        i->set_input(1); //test values
     }
 
     //feed forwards
@@ -126,12 +128,24 @@ int main() {
     cout << "Cost: " << cost(confidences, expected) << endl;
 
     //backpropagation
+    for (int i = 0; i < top.size(); i++) {
+        top[i]->descend(sigma_prime, expected[i]);
+    }
+    top = top[0]->sender_ptrs();
+    while (!top.empty()) {
+        for (int i = 0; i < top.size(); i++) {
+            top[i]->descend(sigma_prime, i);
+        }
+        top = top[0]->sender_ptrs();
+    }
 
+    parameters.close();
 
     //timing execution time
     //auto start = high_resolution_clock::now();
     //auto stop = high_resolution_clock::now();
     //auto duration = duration_cast<microseconds>(stop - start);
     //cout << duration.count();
+
     return 0;
 }
