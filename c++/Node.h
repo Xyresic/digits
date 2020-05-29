@@ -8,40 +8,46 @@
 
 using namespace std;
 
-class Node {
-private:
-    double input;
-
-    //calculation parameters
-    vector<double> weights;
+struct Parameters {
     double bias;
+    vector<double> weights;
+};
 
-    //connections
-    vector<shared_ptr<Node>> senders;
-    vector<shared_ptr<Node>> receivers;
+class Node {
+    private:
+        double input;
 
-    //backpropagation parameters
-    double lin_comb;
-    double output = 0;
-    double del_b = 0;
-    vector<double> del_w;
+        //calculation parameters
+        vector<double> weights;
+        double bias;
 
-public:
-    Node(const vector<double>& weights, double bias);
-    ~Node() = default;
+        //connections
+        vector<shared_ptr<Node>> senders;
+        vector<shared_ptr<Node>> receivers;
 
-    double get_output() {return output;}
-    vector<shared_ptr<Node>> receiver_ptrs() {return receivers;}
-    vector<shared_ptr<Node>> sender_ptrs() {return senders;}
+        //backpropagation parameters
+        double lin_comb;
+        double output = 0;
+        double del_b = 0;
+        vector<double> del_w;
 
-    void set_input(double input);
-    void set_senders(const vector<shared_ptr<Node>>& senders);
-    void set_receivers(const vector<shared_ptr<Node>>& receivers);
+    public:
+        Node(const vector<double>& weights, double bias);
+        ~Node() = default;
 
-    bool is_last();
-    void compute(const function<double(double)>& activator);
-    void descend(const function<double(double)>& derivative, double expected);
-    void descend(const function<double(double)>& derivative, int index);
+        double get_output() {return output;}
+        Parameters get_new_params();
+        vector<shared_ptr<Node>> receiver_ptrs() {return receivers;}
+        vector<shared_ptr<Node>> sender_ptrs() {return senders;}
+
+        void set_input(double input);
+        void set_senders(const vector<shared_ptr<Node>>& senders);
+        void set_receivers(const vector<shared_ptr<Node>>& receivers);
+
+        bool is_last();
+        void compute(const function<double(double)>& activator);
+        void descend(const function<double(double)>& derivative, double expected);
+        void descend(const function<double(double)>& derivative, int index);
 };
 
 

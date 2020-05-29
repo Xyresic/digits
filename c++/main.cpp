@@ -31,17 +31,14 @@ double cost(const vector<double>& results, const vector<double>& expected) {
     return cost;
 }
 
-fstream parameters(".\\params.dat");
+string path = ".\\params.dat";
+ifstream parameters(path);
 
 /* utility */
 //get index of element from vector
 template <class generic>
 int vec_index(const vector<generic>& vec, const generic& ele) {
     return distance(vec.begin(), find(vec.begin(), vec.end(), ele));
-}
-
-string to_string(Node input) {
-    return to_string(input.get_output());
 }
 
 /* debug */
@@ -56,6 +53,10 @@ void print_iterable(const iterable& iter) {
         }
         cout << result.substr(0, result.size() - 1) << ']' << endl;
     }
+}
+
+string to_string(Node input) {
+    return to_string(input.get_output());
 }
 
 int main() {
@@ -100,6 +101,8 @@ int main() {
         return 1;
     }
 
+    parameters.close();
+
     //retrieve inputs from GUI
     //get_inputs(); TODO (Simon)
     for (auto& i : top) {
@@ -128,17 +131,28 @@ int main() {
     cout << "Cost: " << cost(confidences, expected) << endl;
 
     //backpropagation
-    for (int i = 0; i < top.size(); i++) {
-        top[i]->descend(sigma_prime, expected[i]);
-    }
-    top = top[0]->sender_ptrs();
+    ofstream parameters(path);
     while (!top.empty()) {
         for (int i = 0; i < top.size(); i++) {
-            top[i]->descend(sigma_prime, i);
+            if (top[i]->is_last()) {
+                top[i]->descend(sigma_prime, expected[i]);
+            } else {
+                top[i]->descend(sigma_prime, i);
+            }
+            Parameters new_params = top[i]->get_new_params();
+            parameters << new_params.bias << ',';
+            for (auto weight : new_params.weights) {
+                parameters << weight << ',';
+            }
+            parameters << '\n';
         }
         top = top[0]->sender_ptrs();
+        if (!top.empty()) {
+            parameters << '\n';
+        }
     }
 
+    parameters << "end";
     parameters.close();
 
     //timing execution time

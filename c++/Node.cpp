@@ -7,6 +7,16 @@ Node::Node(const vector<double>& weights, double bias) {
     this->bias = bias;
 }
 
+Parameters Node::get_new_params() {
+    double new_bias = bias + del_b;
+    vector<double> new_weights;
+    for (int i = 0; i < weights.size(); i++) {
+        new_weights.push_back(weights[i] + del_w[i]);
+    }
+    Parameters new_params = {new_bias, new_weights};
+    return new_params;
+}
+
 void Node::set_input(double input) {
     this->input = input;
 }
