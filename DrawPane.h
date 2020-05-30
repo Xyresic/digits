@@ -4,21 +4,20 @@
 #include <wx/wx.h>
 
 class DrawPane: public wxPanel {
+    bool dragging;
 public:
     DrawPane(wxFrame* parent);
+
+    void mouseDown(wxMouseEvent& event);
+    void mouseReleased(wxMouseEvent& event);
+    void mouseMove(wxMouseEvent& event);
 
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
 
     void render(wxDC& dc);
 
-    void mouseDown(wxMouseEvent& event);
-    void mouseReleased(wxMouseEvent& event);
-
     DECLARE_EVENT_TABLE()
-
-private:
-    bool pressedDown;
 };
 
 

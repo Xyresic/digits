@@ -1,27 +1,30 @@
 #include "DrawPane.h"
+#include <iostream>
 
-BEGIN_EVENT_TABLE(DrawPane, wxPanel)
-    EVT_LEFT_DOWN(DrawPane::mouseDown)
-    EVT_LEFT_UP(DrawPane::mouseReleased)
-    EVT_PAINT(DrawPane::paintEvent)
-END_EVENT_TABLE()
+using namespace std;
+
+DrawPane::DrawPane(wxFrame* parent): wxPanel(parent) {
+    dragging = false;
+}
 
 void DrawPane::mouseDown(wxMouseEvent& event) {
-    pressedDown = true;
-    paintNow();
+//    CaptureMouse();
+    dragging = true;
 }
 
 void DrawPane::mouseReleased(wxMouseEvent& event) {
-    pressedDown = false;
+//    ReleaseMouse();
+    dragging = false;
 }
 
-DrawPane::DrawPane(wxFrame* parent): wxPanel(parent) {
-    pressedDown = false;
+void DrawPane::mouseMove(wxMouseEvent& event) {
+    if (dragging) {
+        paintNow();
+    }
 }
 
 void DrawPane::paintEvent(wxPaintEvent & evt) {
     wxPaintDC dc(this);
-    render(dc);
 }
 
 void DrawPane::paintNow() {
@@ -30,12 +33,17 @@ void DrawPane::paintNow() {
 }
 
 void DrawPane::render(wxDC& dc) {
-    while (pressedDown) {
-        wxPoint pt = wxGetMousePosition();
-        int mouseX = pt.x;
-        int mouseY = pt.y;
+    wxPoint pt = wxGetMousePosition();
+    int mouseX = pt.x;
+    int mouseY = pt.y;
 
-        dc.SetPen(wxPen(wxColor(0,0,0), 5));
-        dc.DrawLine(mouseX, mouseY, mouseX, mouseY);
-    }
+    dc.SetPen(wxPen(wxColor(0,0,0), 5));
+    dc.DrawLine(mouseX, mouseY, mouseX, mouseY);
 }
+
+BEGIN_EVENT_TABLE(DrawPane, wxPanel)
+                EVT_LEFT_DOWN(DrawPane::mouseDown)
+                EVT_LEFT_UP(DrawPane::mouseReleased)
+                EVT_MOTION(DrawPane::mouseMove)
+                EVT_PAINT(DrawPane::paintEvent)
+END_EVENT_TABLE()
