@@ -11,7 +11,9 @@ void DrawPane::mouseDown(wxMouseEvent& event) {
     paintNow();
 }
 
-void DrawPane::mouseReleased(wxMouseEvent& event) {}
+void DrawPane::mouseReleased(wxMouseEvent& event) {
+    pressedDown = false;
+}
 
 DrawPane::DrawPane(wxFrame* parent): wxPanel(parent) {
     pressedDown = false;
@@ -28,7 +30,7 @@ void DrawPane::paintNow() {
 }
 
 void DrawPane::render(wxDC& dc) {
-    if (pressedDown) {
+    while (pressedDown) {
         wxPoint pt = wxGetMousePosition();
         int mouseX = pt.x;
         int mouseY = pt.y;
