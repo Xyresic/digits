@@ -16,9 +16,10 @@ double swish(double x) {
 }
 function<double(double)> sigma = swish;
 //activator derivative
-double sigma_prime(double x) {
+double swish_prime(double x) {
     return (1 + exp(-x) * (x + 1)) / pow(1 + exp(-x), 2);
 }
+function<double(double)> sigma_prime = swish_prime;
 
 //cost function (quadratic)
 double cost(const vector<double>& results, const vector<double>& expected) {
@@ -30,17 +31,14 @@ double cost(const vector<double>& results, const vector<double>& expected) {
     return cost;
 }
 
-fstream parameters(".\\params.dat");
+string path = ".\\params.dat";
+ifstream parameters(path);
 
 /* utility */
 //get index of element from vector
 template <class generic>
 int vec_index(const vector<generic>& vec, const generic& ele) {
     return distance(vec.begin(), find(vec.begin(), vec.end(), ele));
-}
-
-string to_string(Node input) {
-    return to_string(input.get_output());
 }
 
 /* debug */
@@ -57,13 +55,18 @@ void print_iterable(const iterable& iter) {
     }
 }
 
+string to_string(Node input) {
+    return to_string(input.get_output());
+}
+
 int main() {
     vector<shared_ptr<Node>> top;
     vector<shared_ptr<Node>> carriage;
     vector<double> expected;
     string line;
 
-    expected.push_back(1); //test value
+    //record expected value TODO (SIMON)
+    expected.push_back(1); //test values
 
     //create network
     if (parameters.is_open()) {
@@ -93,15 +96,17 @@ int main() {
                 carriage.emplace_back(make_shared<Node>(weights, bias));
             }
         }
-        parameters.close();
     } else {
         cout << "Unable to open file." << endl;
+        return 1;
     }
 
-    //retrieve inputs
+    parameters.close();
+
+    //retrieve inputs from GUI
     //get_inputs(); TODO (Simon)
     for (auto& i : top) {
-        i->set_input(1);
+        i->set_input(1); //test values
     }
 
     //feed forwards
@@ -126,12 +131,35 @@ int main() {
     cout << "Cost: " << cost(confidences, expected) << endl;
 
     //backpropagation
+    ofstream parameters(path);
+    while (!top.empty()) {
+        for (int i = 0; i < top.size(); i++) {
+            if (top[i]->is_last()) {
+                top[i]->descend(sigma_prime, expected[i]);
+            } else {
+                top[i]->descend(sigma_prime, i);
+            }
+            Parameters new_params = top[i]->get_new_params();
+            parameters << new_params.bias << ',';
+            for (auto weight : new_params.weights) {
+                parameters << weight << ',';
+            }
+            parameters << '\n';
+        }
+        top = top[0]->sender_ptrs();
+        if (!top.empty()) {
+            parameters << '\n';
+        }
+    }
 
+    parameters << "end";
+    parameters.close();
 
     //timing execution time
     //auto start = high_resolution_clock::now();
     //auto stop = high_resolution_clock::now();
     //auto duration = duration_cast<microseconds>(stop - start);
     //cout << duration.count();
+
     return 0;
 }
