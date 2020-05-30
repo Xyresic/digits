@@ -7,6 +7,16 @@ Node::Node(const vector<double>& weights, double bias) {
     this->bias = bias;
 }
 
+Parameters Node::get_new_params() {
+    double new_bias = bias + del_b;
+    vector<double> new_weights;
+    for (int i = 0; i < weights.size(); i++) {
+        new_weights.push_back(weights[i] + del_w[i]);
+    }
+    Parameters new_params = {new_bias, new_weights};
+    return new_params;
+}
+
 void Node::set_input(double input) {
     this->input = input;
 }
@@ -24,13 +34,33 @@ bool Node::is_last() {
 }
 
 void Node::compute(const function<double(double)>& activator) {
-    if (!senders.empty()) {
+    if (senders.empty()) {
+        lin_comb = input * weights[0] + bias;
+    } else {
         for (int i = 0; i < senders.size(); i++) {
-            output += senders[i]->get_output() * weights[i];
+            output += senders[i]->output * weights[i];
         }
         lin_comb = output + bias;
-    } else {
-        lin_comb = input * weights[0] + bias;
     }
     output = activator(lin_comb);
+}
+
+void Node::descend(const function<double(double)>& derivative, double expected) {
+    del_b = -2 * (output - expected) * derivative(lin_comb);
+    for(int i = 0; i < senders.size(); i++) {
+        del_w.push_back(del_b * senders[i]->output);
+    }
+}
+
+void Node::descend(const function<double (double)> &derivative, int index) {
+    for (auto& i : receivers) {
+        del_b += i->del_b * i->weights[index] * lin_comb;
+    }
+    if (senders.empty()){
+        del_w.push_back(del_b * input);
+    } else {
+        for (int i = 0; i < senders.size(); i++) {
+            del_w.push_back(del_b * senders[i]->output);
+        }
+    }
 }
