@@ -34,8 +34,8 @@ void DrawPane::paintNow() {
 
 void DrawPane::render(wxDC& dc) {
     wxPoint pt = wxGetMousePosition();
-    int mouseX = pt.x;
-    int mouseY = pt.y;
+    int mouseX = pt.x - this->GetScreenPosition().x;
+    int mouseY = pt.y - this->GetScreenPosition().y;
 
     dc.SetPen(wxPen(wxColor(0,0,0), 5));
     dc.DrawLine(mouseX, mouseY, mouseX, mouseY);
