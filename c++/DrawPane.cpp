@@ -1,8 +1,6 @@
 #include "DrawPane.h"
 #include <iostream>
 
-using namespace std;
-
 DrawPane::DrawPane(wxFrame* parent): wxPanel(parent) {
     dragging = false;
 }

@@ -1,6 +1,5 @@
 #include "App.h"
 #include "Frame.h"
-#include "DrawPane.h"
 
 bool App::OnInit() {
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);

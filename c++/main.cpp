@@ -5,24 +5,22 @@
 #include <chrono>
 
 #include "Node.h"
-
-using namespace std;
-using namespace std::chrono;
+#include "App.h"
 
 /* neural network */
 //create activator function
 double swish(double x) {
     return x / (1 + exp(-x));
 }
-function<double(double)> sigma = swish;
+std::function<double(double)> sigma = swish;
 //activator derivative
 double swish_prime(double x) {
     return (1 + exp(-x) * (x + 1)) / pow(1 + exp(-x), 2);
 }
-function<double(double)> sigma_prime = swish_prime;
+std::function<double(double)> sigma_prime = swish_prime;
 
 //cost function (quadratic)
-double cost(const vector<double>& results, const vector<double>& expected) {
+double cost(const std::vector<double>& results, const std::vector<double>& expected) {
     double cost = 0;
     for (int i = 0; i < results.size(); i++) {
         double diff = results[i] - expected[i];
@@ -31,13 +29,13 @@ double cost(const vector<double>& results, const vector<double>& expected) {
     return cost;
 }
 
-string path = ".\\params.dat";
-ifstream parameters(path);
+std::string path = ".\\params.dat";
+std::ifstream parameters(path);
 
 /* utility */
 //get index of element from vector
 template <class generic>
-int vec_index(const vector<generic>& vec, const generic& ele) {
+int vec_index(const std::vector<generic>& vec, const generic& ele) {
     return distance(vec.begin(), find(vec.begin(), vec.end(), ele));
 }
 
@@ -45,25 +43,25 @@ int vec_index(const vector<generic>& vec, const generic& ele) {
 template <class iterable>
 void print_iterable(const iterable& iter) {
     if (iter.empty()) {
-        cout << "[]" << endl;
+        std::cout << "[]" << std::endl;
     } else {
-        string result = "[";
+        std::string result = "[";
         for (auto item : iter) {
-            result += to_string(item) + ' ';
+            result += std::to_string(item) + ' ';
         }
-        cout << result.substr(0, result.size() - 1) << ']' << endl;
+        std::cout << result.substr(0, result.size() - 1) << ']' << std::endl;
     }
 }
 
-string to_string(Node input) {
-    return to_string(input.get_output());
+std::string to_string(Node input) {
+    return std::to_string(input.get_output());
 }
 
-int main() {
-    vector<shared_ptr<Node>> top;
-    vector<shared_ptr<Node>> carriage;
-    vector<double> expected;
-    string line;
+int output_main() {
+    std::vector<std::shared_ptr<Node>> top;
+    std::vector<std::shared_ptr<Node>> carriage;
+    std::vector<double> expected;
+    std::string line;
 
     //record expected value TODO (SIMON)
     expected.push_back(1); //test values
@@ -84,7 +82,7 @@ int main() {
                 carriage.clear();
             } else {
                 size_t pos;
-                vector<double> weights;
+                std::vector<double> weights;
 
                 double bias = stod(line, &pos);
                 line = line.substr(pos + 1);
@@ -93,11 +91,11 @@ int main() {
                     line = line.substr(pos + 1);
                 }
 
-                carriage.emplace_back(make_shared<Node>(weights, bias));
+                carriage.emplace_back(std::make_shared<Node>(weights, bias));
             }
         }
     } else {
-        cout << "Unable to open file." << endl;
+        std::cout << "Unable to open file." << std::endl;
         return 1;
     }
 
@@ -118,20 +116,20 @@ int main() {
     }
 
     //get result
-    vector<double> confidences;
+    std::vector<double> confidences;
     for (auto& i : top) {
         i->compute(sigma);
         confidences.push_back(i->get_output());
     }
-    cout << "Results: ";
+    std::cout << "Results: ";
     print_iterable(confidences);
     //cout << vec_index(confidences, *max_element(confidences.begin(), confidences.end())) << endl;
-    cout << "Expected: ";
+    std::cout << "Expected: ";
     print_iterable(expected);
-    cout << "Cost: " << cost(confidences, expected) << endl;
+    std::cout << "Cost: " << cost(confidences, expected) << std::endl;
 
     //backpropagation
-    ofstream parameters(path);
+    std::ofstream parameters(path);
     while (!top.empty()) {
         for (int i = 0; i < top.size(); i++) {
             if (top[i]->is_last()) {
@@ -163,3 +161,5 @@ int main() {
 
     return 0;
 }
+
+wxIMPLEMENT_APP(App);
