@@ -3,7 +3,7 @@
 
 bool App::OnInit() {
     wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    Frame *frame = new Frame("digits", wxPoint(50, 50), wxSize(400, 400));
+    Frame *frame = new Frame("digits", wxPoint(50, 50), wxSize(600, 600));
 
     drawPane = new DrawPane((wxFrame*) frame);
     sizer->Add(drawPane, 1, wxEXPAND);

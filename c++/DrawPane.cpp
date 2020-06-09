@@ -6,12 +6,11 @@ DrawPane::DrawPane(wxFrame* parent): wxPanel(parent) {
 }
 
 void DrawPane::mouseDown(wxMouseEvent& event) {
-//    CaptureMouse();
     dragging = true;
+    paintNow();
 }
 
 void DrawPane::mouseReleased(wxMouseEvent& event) {
-//    ReleaseMouse();
     dragging = false;
 }
 
