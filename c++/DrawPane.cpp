@@ -1,7 +1,7 @@
 #include "DrawPane.h"
 #include <iostream>
 
-DrawPane::DrawPane(wxFrame* parent): wxPanel(parent) {
+DrawPane::DrawPane(wxFrame* parent, const wxSize &size): wxPanel(parent) {
     dragging = false;
 }
 

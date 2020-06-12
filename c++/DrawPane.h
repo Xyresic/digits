@@ -6,7 +6,7 @@
 class DrawPane: public wxPanel {
     bool dragging;
 public:
-    DrawPane(wxFrame* parent);
+    DrawPane(wxFrame* parent, const wxSize &size);
 
     void mouseDown(wxMouseEvent& event);
     void mouseReleased(wxMouseEvent& event);

@@ -11,6 +11,7 @@ public:
     virtual bool OnInit(); //parameters upon implementing
 
     DrawPane * drawPane;
+    wxTextCtrl * guessText;
 };
 
 #endif //DIGITS_APP_H
