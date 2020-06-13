@@ -10,8 +10,10 @@ class App: public wxApp {
 public:
     virtual bool OnInit(); //parameters upon implementing
 
+    wxBoxSizer * sizer;
+    wxGridSizer * grid;
     DrawPane * drawPane;
-    wxTextCtrl * guessText;
+    wxStaticText * guessText;
 };
 
 #endif //DIGITS_APP_H
