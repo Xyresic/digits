@@ -14,6 +14,7 @@ public:
     wxGridSizer * grid;
     DrawPane * drawPane;
     wxStaticText * guessText;
+    wxFont * textFont;
 };
 
 #endif //DIGITS_APP_H

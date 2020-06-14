@@ -10,6 +10,8 @@ bool App::OnInit() {
     drawPane = new DrawPane((wxFrame*) frame, wxSize(400,400));
     guessText = new wxStaticText((wxFrame*) frame, -1, "Guess: ", wxPoint(300, 0), wxSize(300, 200));
 
+    textFont = new wxFont(20, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    guessText->SetFont(*textFont);
     grid->Add(drawPane, 1, wxEXPAND);
     grid->Add(guessText, 1);
 
