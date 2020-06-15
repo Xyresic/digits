@@ -4,7 +4,6 @@
 #include <wx/wx.h>
 
 class DrawPane: public wxPanel {
-    bool dragging;
 public:
     DrawPane(wxFrame* parent, const wxSize &size);
 
@@ -14,9 +13,10 @@ public:
 
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
-
     void render(wxDC& dc);
 
+private:
+    bool dragging;
     DECLARE_EVENT_TABLE()
 };
 

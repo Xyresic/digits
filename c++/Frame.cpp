@@ -13,15 +13,35 @@ Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size)
     menuBar->Append(menuHelp, "&Help");
 
     SetMenuBar(menuBar);
-
     CreateStatusBar();
+
+    //drawing canvas
+    drawPane = new DrawPane((wxFrame*) this, wxSize(400,400));
+
+    //guess area
+    guessText = new wxStaticText((wxFrame*) this, -1, "Guess: ", wxPoint(300, 0), wxSize(300, 200));
+    textFont = new wxFont(20, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    guessText->SetFont(*textFont);
+
+    //button to clear drawing
+    clearButton = new wxButton((wxFrame*) this, -1, "Clear drawing");
+
+    //grid layout of components
+    grid = new wxGridSizer(2, 2, 0, 0);
+    grid->Add(drawPane, 1, wxEXPAND);
+    grid->Add(guessText, 1);
+    grid->Add(clearButton, 1);
+    sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(grid, 1, wxEXPAND);
+    this->SetSizer(grid);
+    this->Show(true);
 }
 
-//mapping identifiers to frame events
-wxBEGIN_EVENT_TABLE(Frame, wxFrame)
+//mapping ids to frame events
+BEGIN_EVENT_TABLE(Frame, wxFrame)
     EVT_MENU(wxID_EXIT, Frame::OnExit)
     EVT_MENU(wxID_ABOUT, Frame::OnAbout)
-wxEND_EVENT_TABLE()
+END_EVENT_TABLE()
 
 void Frame::OnExit(wxCommandEvent& event) {
     Close(true);

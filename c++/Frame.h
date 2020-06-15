@@ -3,6 +3,7 @@
 
 
 #include <wx/wx.h>
+#include "DrawPane.h"
 
 //main window
 class Frame: public wxFrame {
@@ -14,7 +15,14 @@ private:
     void OnExit(wxCommandEvent &event);
     void OnAbout(wxCommandEvent &event);
 
-wxDECLARE_EVENT_TABLE();
+    wxBoxSizer * sizer;
+    wxGridSizer * grid;
+    DrawPane * drawPane;
+    wxStaticText * guessText;
+    wxButton * clearButton;
+    wxFont * textFont;
+
+    DECLARE_EVENT_TABLE();
 };
 
 #endif //DIGITS_FRAME_H

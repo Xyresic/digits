@@ -39,8 +39,8 @@ void DrawPane::render(wxDC& dc) {
 }
 
 BEGIN_EVENT_TABLE(DrawPane, wxPanel)
-                EVT_LEFT_DOWN(DrawPane::mouseDown)
-                EVT_LEFT_UP(DrawPane::mouseReleased)
-                EVT_MOTION(DrawPane::mouseMove)
-                EVT_PAINT(DrawPane::paintEvent)
+    EVT_LEFT_DOWN(DrawPane::mouseDown)
+    EVT_LEFT_UP(DrawPane::mouseReleased)
+    EVT_MOTION(DrawPane::mouseMove)
+    EVT_PAINT(DrawPane::paintEvent)
 END_EVENT_TABLE()
