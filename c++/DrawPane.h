@@ -11,12 +11,14 @@ public:
     void mouseReleased(wxMouseEvent& event);
     void mouseMove(wxMouseEvent& event);
 
-    void paintEvent(wxPaintEvent & evt);
+    void paintEvent(wxPaintEvent& event);
     void paintNow();
     void render(wxDC& dc);
+    void clearPaint();
 
 private:
     bool dragging;
+    wxClientDC drawDC;
     DECLARE_EVENT_TABLE()
 };
 

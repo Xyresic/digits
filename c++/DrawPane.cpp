@@ -1,7 +1,6 @@
 #include "DrawPane.h"
-#include <iostream>
 
-DrawPane::DrawPane(wxFrame* parent, const wxSize &size): wxPanel(parent) {
+DrawPane::DrawPane(wxFrame* parent, const wxSize &size): wxPanel(parent), drawDC(this) {
     dragging = false;
 }
 
@@ -20,13 +19,12 @@ void DrawPane::mouseMove(wxMouseEvent& event) {
     }
 }
 
-void DrawPane::paintEvent(wxPaintEvent & evt) {
+void DrawPane::paintEvent(wxPaintEvent& event) {
     wxPaintDC dc(this);
 }
 
 void DrawPane::paintNow() {
-    wxClientDC dc(this);
-    render(dc);
+    render(drawDC);
 }
 
 void DrawPane::render(wxDC& dc) {
@@ -36,6 +34,10 @@ void DrawPane::render(wxDC& dc) {
 
     dc.SetPen(wxPen(wxColor(0,0,0), 5));
     dc.DrawLine(mouseX, mouseY, mouseX, mouseY);
+}
+
+void DrawPane::clearPaint() {
+    drawDC.Clear();
 }
 
 BEGIN_EVENT_TABLE(DrawPane, wxPanel)

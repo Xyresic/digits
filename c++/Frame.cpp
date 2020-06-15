@@ -1,7 +1,6 @@
 #include "Frame.h"
 
-Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size)
-        : wxFrame(NULL, wxID_ANY, title, pos, size) {
+Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size) : wxFrame(NULL, wxID_ANY, title, pos, size) {
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(wxID_EXIT);
 
@@ -24,7 +23,7 @@ Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size)
     guessText->SetFont(*textFont);
 
     //button to clear drawing
-    clearButton = new wxButton((wxFrame*) this, -1, "Clear drawing");
+    clearButton = new wxButton((wxFrame*) this, CLEAR_ID, "Clear drawing");
 
     //grid layout of components
     grid = new wxGridSizer(2, 2, 0, 0);
@@ -34,19 +33,25 @@ Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size)
     sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(grid, 1, wxEXPAND);
     this->SetSizer(grid);
+
     this->Show(true);
+}
+
+void Frame::onExit(wxCommandEvent& event) {
+    Close(true);
+}
+
+void Frame::onAbout(wxCommandEvent& event) {
+    wxMessageBox("This is a program to read and identify digits.", "About", wxOK | wxICON_INFORMATION);
+}
+
+void Frame::onClear(wxCommandEvent& event) {
+    drawPane->clearPaint();
 }
 
 //mapping ids to frame events
 BEGIN_EVENT_TABLE(Frame, wxFrame)
-    EVT_MENU(wxID_EXIT, Frame::OnExit)
-    EVT_MENU(wxID_ABOUT, Frame::OnAbout)
+    EVT_MENU(wxID_EXIT, Frame::onExit)
+    EVT_MENU(wxID_ABOUT, Frame::onAbout)
+    EVT_BUTTON(CLEAR_ID, Frame::onClear)
 END_EVENT_TABLE()
-
-void Frame::OnExit(wxCommandEvent& event) {
-    Close(true);
-}
-
-void Frame::OnAbout(wxCommandEvent& event) {
-    wxMessageBox("This is a program to read and identify digits.", "About", wxOK | wxICON_INFORMATION);
-}

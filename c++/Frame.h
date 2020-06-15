@@ -12,8 +12,9 @@ public:
 
 private:
     //event handlers
-    void OnExit(wxCommandEvent &event);
-    void OnAbout(wxCommandEvent &event);
+    void onExit(wxCommandEvent &event);
+    void onAbout(wxCommandEvent &event);
+    void onClear(wxCommandEvent &event);
 
     wxBoxSizer * sizer;
     wxGridSizer * grid;
@@ -21,6 +22,8 @@ private:
     wxStaticText * guessText;
     wxButton * clearButton;
     wxFont * textFont;
+
+    enum {CLEAR_ID = wxID_HIGHEST + 100};
 
     DECLARE_EVENT_TABLE();
 };
