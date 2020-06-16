@@ -34,6 +34,7 @@ Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size) : wxF
     sizer->Add(grid, 1, wxEXPAND);
     this->SetSizer(grid);
 
+    this->SetBackgroundColour(wxColour(255, 255, 255));
     this->Show(true);
 }
 
