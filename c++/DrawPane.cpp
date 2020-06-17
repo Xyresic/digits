@@ -3,6 +3,7 @@
 DrawPane::DrawPane(wxFrame* parent, const wxSize &size): wxPanel(parent), drawDC(this) {
     dragging = false;
     this->SetBackgroundColour(wxColour(240, 240, 240));
+    this->SetWindowStyleFlag(wxBORDER_SIMPLE);
 }
 
 void DrawPane::mouseDown(wxMouseEvent& event) {
