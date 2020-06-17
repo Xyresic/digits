@@ -26,7 +26,7 @@ Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size) : wxF
     clearButton = new wxButton((wxFrame*) this, CLEAR_ID, "Clear drawing");
 
     //grid layout of components
-    grid = new wxGridSizer(2, 2, 0, 0);
+    grid = new wxGridSizer(2, 2, 5, 5);
     grid->Add(drawPane, 1, wxEXPAND);
     grid->Add(guessText, 1);
     grid->Add(clearButton, 1);
