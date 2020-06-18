@@ -30,8 +30,6 @@ Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size) : wxF
     grid->Add(drawPane, 1, wxEXPAND);
     grid->Add(guessText, 1);
     grid->Add(clearButton, 1);
-    sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(grid, 1, wxEXPAND);
     this->SetSizer(grid);
 
     this->SetBackgroundColour(wxColour(255, 255, 255));

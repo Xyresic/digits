@@ -7,7 +7,7 @@
 //main app class derived from wxApp
 class App: public wxApp {
 public:
-    virtual bool OnInit(); //parameters upon implementing
+    virtual bool OnInit();
 };
 
 #endif //DIGITS_APP_H

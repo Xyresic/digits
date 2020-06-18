@@ -16,12 +16,11 @@ private:
     void onAbout(wxCommandEvent &event);
     void onClear(wxCommandEvent &event);
 
-    wxBoxSizer * sizer;
-    wxGridSizer * grid;
-    DrawPane * drawPane;
-    wxStaticText * guessText;
-    wxButton * clearButton;
-    wxFont * textFont;
+    wxGridSizer *grid;
+    DrawPane *drawPane;
+    wxStaticText *guessText;
+    wxButton *clearButton;
+    wxFont *textFont;
 
     enum {CLEAR_ID = wxID_HIGHEST + 100};
 
