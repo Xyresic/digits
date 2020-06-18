@@ -17,14 +17,15 @@ private:
     void onClear(wxCommandEvent &event);
 
     wxGridSizer *grid;
+    wxGridSizer *numberGrid;
     DrawPane *drawPane;
     wxStaticText *guessText;
     wxButton *clearButton;
     wxFont *textFont;
 
-    enum {CLEAR_ID = wxID_HIGHEST + 100};
+    enum {CLEAR_ID = wxID_HIGHEST + 99};
 
-    DECLARE_EVENT_TABLE();
+DECLARE_EVENT_TABLE();
 };
 
 #endif //DIGITS_FRAME_H

@@ -1,4 +1,5 @@
 #include "Frame.h"
+#include <string>
 
 Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size) : wxFrame(NULL, wxID_ANY, title, pos, size) {
     wxMenu *menuFile = new wxMenu;
@@ -25,13 +26,27 @@ Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size) : wxF
     //button to clear drawing
     clearButton = new wxButton((wxFrame*) this, CLEAR_ID, "Clear drawing");
 
+    //number button grid
+    numberGrid = new wxGridSizer(4, 3, 2, 2);
+    for (int i = 3; i >= 1; i--) {
+        for (int j = (3 * i - 2); j <= 3 * i; j++) {
+            wxButton *button = new wxButton((wxFrame*) this, wxID_HIGHEST + j + 100, std::to_string(j));
+            numberGrid->Add(button, 1);
+        }
+    }
+
+    wxButton *zeroButton = new wxButton((wxFrame*) this, wxID_HIGHEST + 100, "0");
+    wxPanel *panel = new wxPanel((wxFrame*) this, -1);
+    numberGrid->Add(panel, 1);
+    numberGrid->Add(zeroButton, 1);
+
     //grid layout of components
     grid = new wxGridSizer(2, 2, 5, 5);
     grid->Add(drawPane, 1, wxEXPAND);
-    grid->Add(guessText, 1);
+    grid->Add(guessText, 1, wxEXPAND);
     grid->Add(clearButton, 1);
+    grid->Add(numberGrid, 1);
     this->SetSizer(grid);
-
     this->SetBackgroundColour(wxColour(255, 255, 255));
     this->Show(true);
 }
