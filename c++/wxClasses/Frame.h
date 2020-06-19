@@ -23,7 +23,8 @@ private:
     wxButton *clearButton;
     wxFont *textFont;
 
-    enum {CLEAR_ID = wxID_HIGHEST + 99};
+    enum {CLEAR_ID = wxID_HIGHEST + 98};
+    enum {GUESS_ID = wxID_HIGHEST + 99};
 
 DECLARE_EVENT_TABLE();
 };

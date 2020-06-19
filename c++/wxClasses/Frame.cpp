@@ -26,6 +26,9 @@ Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size) : wxF
     //button to clear drawing
     clearButton = new wxButton((wxFrame*) this, CLEAR_ID, "Clear drawing");
 
+    //button to guess the number
+    wxButton *guessButton = new wxButton((wxFrame*) this, GUESS_ID, "Guess");
+
     //number button grid
     numberGrid = new wxGridSizer(4, 3, 2, 2);
     for (int i = 3; i >= 1; i--) {
@@ -40,11 +43,14 @@ Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size) : wxF
     numberGrid->Add(panel, 1);
     numberGrid->Add(zeroButton, 1);
 
-    //grid layout of components
+    //master grid layout of all components
+    wxBoxSizer *controlSizer = new wxBoxSizer(wxHORIZONTAL);
+    controlSizer->Add(clearButton);
+    controlSizer->Add(guessButton);
     grid = new wxGridSizer(2, 2, 5, 5);
     grid->Add(drawPane, 1, wxEXPAND);
-    grid->Add(guessText, 1, wxEXPAND);
-    grid->Add(clearButton, 1);
+    grid->Add(guessText, 1);
+    grid->Add(controlSizer, 1);
     grid->Add(numberGrid, 1);
     this->SetSizer(grid);
     this->SetBackgroundColour(wxColour(255, 255, 255));
