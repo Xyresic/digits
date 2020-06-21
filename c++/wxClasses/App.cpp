@@ -2,6 +2,6 @@
 #include "Frame.h"
 
 bool App::OnInit() {
-    Frame *frame = new Frame("digits", wxPoint(50,50), wxSize(600,600));
+    Frame *frame = new Frame("digits", wxPoint(50,50), wxSize(600,450));
     return true;
 }

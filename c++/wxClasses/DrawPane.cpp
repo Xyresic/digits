@@ -1,9 +1,8 @@
 #include "DrawPane.h"
 
-DrawPane::DrawPane(wxFrame* parent, const wxSize &size): wxPanel(parent), drawDC(this) {
+DrawPane::DrawPane(wxFrame* parent, const wxPoint& pos, const wxSize &size): wxPanel(parent, wxID_ANY, pos, size), drawDC(this) {
     dragging = false;
     this->SetBackgroundColour(wxColour(240, 240, 240));
-    this->SetWindowStyleFlag(wxBORDER_SIMPLE);
 }
 
 void DrawPane::mouseDown(wxMouseEvent& event) {

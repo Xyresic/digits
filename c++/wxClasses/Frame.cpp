@@ -1,7 +1,8 @@
 #include "Frame.h"
 #include <string>
 
-Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size) : wxFrame(NULL, wxID_ANY, title, pos, size) {
+Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame(NULL, wxID_ANY, title, pos, size) {
+    //standard menu components
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(wxID_EXIT);
 
@@ -16,7 +17,7 @@ Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size) : wxF
     CreateStatusBar();
 
     //drawing canvas
-    drawPane = new DrawPane((wxFrame*) this, wxSize(400,400));
+    drawPane = new DrawPane((wxFrame*) this, wxDefaultPosition, wxSize(300,300));
 
     //guess area
     guessText = new wxStaticText((wxFrame*) this, -1, "Guess: ", wxPoint(300, 0), wxSize(300, 200));
@@ -43,16 +44,24 @@ Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize&size) : wxF
     numberGrid->Add(panel, 1);
     numberGrid->Add(zeroButton, 1);
 
-    //master grid layout of all components
+    //master layout of all components
     wxBoxSizer *controlSizer = new wxBoxSizer(wxHORIZONTAL);
     controlSizer->Add(clearButton);
     controlSizer->Add(guessButton);
-    grid = new wxGridSizer(2, 2, 5, 5);
-    grid->Add(drawPane, 1, wxEXPAND);
-    grid->Add(guessText, 1);
-    grid->Add(controlSizer, 1);
-    grid->Add(numberGrid, 1);
-    this->SetSizer(grid);
+
+    wxFlexGridSizer *leftColumn = new wxFlexGridSizer(2, 1, 0, 0);
+    leftColumn->Add(drawPane, 1);
+    leftColumn->Add(controlSizer, 1, wxEXPAND);
+
+    wxFlexGridSizer *rightColumn = new wxFlexGridSizer(2, 1, 0, 0);
+    rightColumn->Add(guessText, 1);
+    rightColumn->Add(numberGrid, 1);
+
+    wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
+    sizer->Add(leftColumn, 1);
+    sizer->Add(rightColumn, 1);
+
+    this->SetSizer(sizer);
     this->SetBackgroundColour(wxColour(255, 255, 255));
     this->Show(true);
 }
