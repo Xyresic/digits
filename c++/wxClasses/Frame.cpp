@@ -1,5 +1,7 @@
 #include "Frame.h"
+#include <windows.h>
 #include <string>
+#include <iostream>
 
 Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame(NULL, wxID_ANY, title, pos, size) {
     //standard menu components
@@ -78,9 +80,30 @@ void Frame::onClear(wxCommandEvent& event) {
     drawPane->clearPaint();
 }
 
+void Frame::onGuess(wxCommandEvent& event) {
+    HWND window = ::FindWindowA(NULL, "digits");
+    HDC dc = ::GetDC(window);
+    HDC compDC = ::CreateCompatibleDC(dc);
+    HBITMAP bitmap = ::CreateCompatibleBitmap(dc, drawPane->GetSize().GetWidth(), drawPane->GetSize().GetHeight());
+    ::SelectObject(compDC, bitmap);
+    ::BitBlt(compDC, 0, 0, drawPane->GetSize().GetWidth(), drawPane->GetSize().GetHeight(), dc, 0, 0, SRCCOPY);
+    COLORREF *pixelPtrArray[drawPane->GetSize().GetWidth() * drawPane->GetSize().GetHeight()];
+    for (int i = 0; i < drawPane->GetSize().GetWidth(); i++) {
+        for (int j = 0; j < drawPane->GetSize().GetHeight(); j++) {
+            COLORREF pixel = ::GetPixel(compDC, i, j);
+            COLORREF *ptr = &pixel;
+            pixelPtrArray[i * 300 + j] = ptr;
+        }
+    }
+
+    ::DeleteDC(compDC);
+    ::DeleteObject(bitmap);
+}
+
 //mapping ids to frame events
 BEGIN_EVENT_TABLE(Frame, wxFrame)
     EVT_MENU(wxID_EXIT, Frame::onExit)
     EVT_MENU(wxID_ABOUT, Frame::onAbout)
     EVT_BUTTON(CLEAR_ID, Frame::onClear)
+    EVT_BUTTON(GUESS_ID, Frame::onGuess)
 END_EVENT_TABLE()

@@ -11,12 +11,11 @@ public:
     Frame(const wxString &title, const wxPoint &pos, const wxSize &size);
 
 private:
-    //event handlers
     void onExit(wxCommandEvent &event);
     void onAbout(wxCommandEvent &event);
     void onClear(wxCommandEvent &event);
+    void onGuess(wxCommandEvent &event);
 
-    wxGridSizer *grid;
     wxGridSizer *numberGrid;
     DrawPane *drawPane;
     wxStaticText *guessText;
