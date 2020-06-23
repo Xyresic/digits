@@ -1,7 +1,6 @@
 #include "Frame.h"
 #include <windows.h>
 #include <string>
-#include <iostream>
 
 Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame(NULL, wxID_ANY, title, pos, size) {
     //standard menu components
@@ -88,11 +87,11 @@ void Frame::onGuess(wxCommandEvent& event) {
     ::SelectObject(compDC, bitmap);
     ::BitBlt(compDC, 0, 0, drawPane->GetSize().GetWidth(), drawPane->GetSize().GetHeight(), dc, 0, 0, SRCCOPY);
     COLORREF *pixelPtrArray[drawPane->GetSize().GetWidth() * drawPane->GetSize().GetHeight()];
-    for (int i = 0; i < drawPane->GetSize().GetWidth(); i++) {
-        for (int j = 0; j < drawPane->GetSize().GetHeight(); j++) {
-            COLORREF pixel = ::GetPixel(compDC, i, j);
+    for (int x = 0; x < drawPane->GetSize().GetWidth(); x++) {
+        for (int y = 0; y < drawPane->GetSize().GetHeight(); y++) {
+            COLORREF pixel = ::GetPixel(compDC, x, y);
             COLORREF *ptr = &pixel;
-            pixelPtrArray[i * 300 + j] = ptr;
+            pixelPtrArray[x * 300 + y] = ptr;
         }
     }
 
