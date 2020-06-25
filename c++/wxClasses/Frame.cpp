@@ -1,5 +1,4 @@
 #include "Frame.h"
-#include <windows.h>
 #include <string>
 
 Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame(NULL, wxID_ANY, title, pos, size) {
@@ -80,23 +79,19 @@ void Frame::onClear(wxCommandEvent& event) {
 }
 
 void Frame::onGuess(wxCommandEvent& event) {
-    HWND window = ::FindWindowA(NULL, "digits");
-    HDC dc = ::GetDC(window);
-    HDC compDC = ::CreateCompatibleDC(dc);
-    HBITMAP bitmap = ::CreateCompatibleBitmap(dc, drawPane->GetSize().GetWidth(), drawPane->GetSize().GetHeight());
-    ::SelectObject(compDC, bitmap);
-    ::BitBlt(compDC, 0, 0, drawPane->GetSize().GetWidth(), drawPane->GetSize().GetHeight(), dc, 0, 0, SRCCOPY);
-    COLORREF *pixelPtrArray[drawPane->GetSize().GetWidth() * drawPane->GetSize().GetHeight()];
+    wxWindowDC windowDC(drawPane);
+    unsigned int pixelArray[drawPane->GetSize().GetWidth() * drawPane->GetSize().GetHeight()];
     for (int x = 0; x < drawPane->GetSize().GetWidth(); x++) {
         for (int y = 0; y < drawPane->GetSize().GetHeight(); y++) {
-            COLORREF pixel = ::GetPixel(compDC, x, y);
-            COLORREF *ptr = &pixel;
-            pixelPtrArray[x * 300 + y] = ptr;
+            wxColour color;
+            wxColour *colorPtr = &color;
+            windowDC.GetPixel(0, 0, colorPtr);
+            pixelArray[x * 300 + y] = colorPtr->GetRGB();
         }
     }
+    std::cout << pixelArray[0] << std::endl;
+    std::cout << pixelArray[drawPane->GetSize().GetWidth() * drawPane->GetSize().GetHeight() - 1] << std::endl;
 
-    ::DeleteDC(compDC);
-    ::DeleteObject(bitmap);
 }
 
 //mapping ids to frame events
