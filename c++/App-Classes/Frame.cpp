@@ -89,9 +89,6 @@ void Frame::onGuess(wxCommandEvent& event) {
             pixelArray[x * 300 + y] = colorPtr->GetRGB();
         }
     }
-    std::cout << pixelArray[0] << std::endl;
-    std::cout << pixelArray[drawPane->GetSize().GetWidth() * drawPane->GetSize().GetHeight() - 1] << std::endl;
-
 }
 
 //mapping ids to frame events

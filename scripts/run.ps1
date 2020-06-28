@@ -1,2 +1,2 @@
-g++ -I'C:\wxWidgets-3.1.3\lib\gcc_dll\mswu\' -I'C:\wxWidgets-3.1.3\include\' -L"C:\wxWidgets-3.1.3\lib" -o run .\c++\main.cpp .\c++\Node.cpp .\c++\App.cpp .\c++\Frame.cpp .\c++\DrawPane.cpp
-.\run.exe
+g++ -c -o digits .\c++\main.cpp .\c++\Node.cpp .\c++\wxClasses\App.cpp .\c++\wxClasses\Frame.cpp .\c++\wxClasses\DrawPane.cpp -g -O0 -mthreads  -DHAVE_W32API_H -D__WXMSW__       -D_UNICODE -IC:\wxWidgets-3.1.3\lib\gcc_dll\mswu -IC:\wxWidgets-3.1.3\include  -W -Wall -I.   -DNOPCH   -Wno-ctor-dtor-privacy   -MD -MP main.cpp
+./digits.exe
