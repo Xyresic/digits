@@ -5,7 +5,7 @@
 #include <chrono>
 
 #include "Node.h"
-#include "wxClasses/App.h"
+#include "App-Classes/App.h"
 
 /* neural network */
 //create activator function
