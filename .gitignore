@@ -65,8 +65,9 @@
 # cmake-debug
 cmake-build-debug/
 
-# independent cmake compile
+# standalone cmake compile files
 CMakeCache.txt
 CMakeFiles
 Makefile
 cmake_install.cmake
+*.cbp
