@@ -11,7 +11,7 @@ Simon Wu - C++20 (GUI)
 ## Dependencies
 wxWidgets 3.1.3
 ## Compiling instructions
-To compile with the source code, the user should have CMake 3.17.3 or earlier. If you are using MinGW, please run these two lines in the base project directory:
+To compile with the source code, the user should have CMake 3.17.3 or earlier. If you are using MinGW, please run these two lines in the base project directory in the command prompt:
 ```
 cmake <your project directory path> -G "MinGW Makefiles"
 mingw32-make 
