@@ -64,3 +64,9 @@
 
 # cmake-debug
 cmake-build-debug/
+
+# independent cmake compile
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
