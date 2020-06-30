@@ -80,11 +80,11 @@ void Frame::onClear(wxCommandEvent& event) {
 
 void Frame::onGuess(wxCommandEvent& event) {
     unsigned int pixelArray[drawPane->GetSize().GetWidth() * drawPane->GetSize().GetHeight()];
+    wxColour color;
+    wxColour *colorPtr = &color;
     for (int x = 0; x < drawPane->GetSize().GetWidth(); x++) {
         for (int y = 0; y < drawPane->GetSize().GetHeight(); y++) {
-            wxColour color;
-            wxColour *colorPtr = &color;
-            drawPane->drawDC.GetPixel(0, 0, colorPtr);
+            drawPane->drawDC.GetPixel(x, y, colorPtr);
             pixelArray[x * 300 + y] = colorPtr->GetRGB();
         }
     }
