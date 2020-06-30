@@ -29,20 +29,25 @@ void Node::set_receivers(const std::vector<std::shared_ptr<Node>>& receivers) {
     this->receivers = receivers;
 }
 
+bool Node::is_first() {
+    return senders.empty();
+}
+
 bool Node::is_last() {
     return receivers.empty();
 }
 
 void Node::compute(const std::function<double(double)>& activator) {
     if (senders.empty()) {
-        lin_comb = input * weights[0] + bias;
+        lin_comb = input;
+        output = input;
     } else {
         for (int i = 0; i < senders.size(); i++) {
             output += senders[i]->output * weights[i];
         }
         lin_comb = output + bias;
+        output = activator(lin_comb);
     }
-    output = activator(lin_comb);
 }
 
 void Node::descend(const std::function<double(double)>& derivative, double expected) {
@@ -56,11 +61,7 @@ void Node::descend(const std::function<double (double)> &derivative, int index) 
     for (auto& i : receivers) {
         del_b += i->del_b * i->weights[index] * lin_comb;
     }
-    if (senders.empty()){
-        del_w.push_back(del_b * input);
-    } else {
-        for (int i = 0; i < senders.size(); i++) {
-            del_w.push_back(del_b * senders[i]->output);
-        }
+    for (int i = 0; i < senders.size(); i++) {
+        del_w.push_back(del_b * senders[i]->output);
     }
 }

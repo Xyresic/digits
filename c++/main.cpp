@@ -2,7 +2,6 @@
 #include <fstream>
 #include <algorithm>
 #include <cmath>
-#include <chrono>
 
 #include "Node.h"
 #include "App-Classes/App.h"
@@ -57,7 +56,20 @@ std::string to_string(Node input) {
     return std::to_string(input.get_output());
 }
 
-int output_main() {
+void link_layers(std::vector<std::shared_ptr<Node>>& top, std::vector<std::shared_ptr<Node>>& carriage) {
+    if (!top.empty()) {
+        for (auto &node : carriage) {
+            node->set_receivers(top);
+        }
+        for (auto &node : top) {
+            node->set_senders(carriage);
+        }
+    }
+    top = carriage;
+    carriage.clear();
+}
+
+int run_network() {
     std::vector<std::shared_ptr<Node>> top;
     std::vector<std::shared_ptr<Node>> carriage;
     std::vector<double> expected;
@@ -70,16 +82,14 @@ int output_main() {
     if (parameters.is_open()) {
         while (getline(parameters, line)) {
             if (line.empty() || line == "end") {
-                if (!top.empty()) {
-                    for (auto& node : carriage) {
-                        node->set_receivers(top);
+                link_layers(top, carriage);
+                if (line == "end") {
+                    for (auto& i : top[0]->get_weights()) {
+                        std::vector<double> weights;
+                        carriage.emplace_back(std::make_shared<Node>(weights, 0));
                     }
-                    for (auto& node : top) {
-                        node->set_senders(carriage);
-                    }
+                    link_layers(top, carriage);
                 }
-                top = carriage;
-                carriage.clear();
             } else {
                 size_t pos;
                 std::vector<double> weights;
@@ -130,7 +140,7 @@ int output_main() {
 
     //backpropagation
     std::ofstream parameters(path);
-    while (!top.empty()) {
+    while (!top[0]->is_first()) {
         for (int i = 0; i < top.size(); i++) {
             if (top[i]->is_last()) {
                 top[i]->descend(sigma_prime, expected[i]);
@@ -145,7 +155,7 @@ int output_main() {
             parameters << '\n';
         }
         top = top[0]->sender_ptrs();
-        if (!top.empty()) {
+        if (!top[0]->is_first()) {
             parameters << '\n';
         }
     }
@@ -153,13 +163,21 @@ int output_main() {
     parameters << "end";
     parameters.close();
 
-    //timing execution time
-    //auto start = high_resolution_clock::now();
-    //auto stop = high_resolution_clock::now();
-    //auto duration = duration_cast<microseconds>(stop - start);
-    //cout << duration.count();
+    return 0;
+}
+
+int main() {
+    /*std::ofstream parameters(path);
+    if (parameters.is_open()) {
+
+    } else {
+        std::cout << "Unable to open file." << std::endl;
+        return 1;
+    }*/
+
+    run_network();
 
     return 0;
 }
 
-wxIMPLEMENT_APP(App);
+//wxIMPLEMENT_APP(App);
