@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include <algorithm>
 #include <cmath>
+#include <random>
 
 #include "Node.h"
 #include "App-Classes/App.h"
@@ -30,6 +30,9 @@ double cost(const std::vector<double>& results, const std::vector<double>& expec
 
 std::string path = ".\\params.dat";
 std::ifstream parameters(path);
+
+std::default_random_engine engine;
+std::uniform_real_distribution<double> distribution(-10.0, 10.0);
 
 /* utility */
 //get index of element from vector
@@ -67,6 +70,34 @@ void link_layers(std::vector<std::shared_ptr<Node>>& top, std::vector<std::share
     }
     top = carriage;
     carriage.clear();
+}
+
+void initialize_layer(std::ofstream& file, int nodes, int weights) {
+    for (int i = 0; i < nodes; i++) {
+        file << 0 << ',';
+        for (int j = 0; j < weights; j++) {
+            file << distribution(engine) << ',';
+        }
+        file << '\n';
+    }
+}
+
+int initialize_network() {
+    std::ofstream parameters(path);
+    if (parameters.is_open()) {
+        initialize_layer(parameters, 10, 10);
+        parameters << '\n';
+        initialize_layer(parameters, 10, 300);
+        parameters << '\n';
+        initialize_layer(parameters, 300, 90000);
+        parameters << "end";
+    } else {
+        std::cout << "Unable to open file." << std::endl;
+        return 1;
+    }
+
+    parameters.close();
+    return 0;
 }
 
 int run_network() {
@@ -166,18 +197,4 @@ int run_network() {
     return 0;
 }
 
-int main() {
-    /*std::ofstream parameters(path);
-    if (parameters.is_open()) {
-
-    } else {
-        std::cout << "Unable to open file." << std::endl;
-        return 1;
-    }*/
-
-    run_network();
-
-    return 0;
-}
-
-//wxIMPLEMENT_APP(App);
+wxIMPLEMENT_APP(App);
