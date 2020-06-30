@@ -16,9 +16,10 @@ public:
     void render(wxDC& dc);
     void clearPaint();
 
+    wxClientDC drawDC;
+
 private:
     bool dragging;
-    wxClientDC drawDC;
     DECLARE_EVENT_TABLE()
 };
 

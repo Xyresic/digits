@@ -13,8 +13,6 @@ public:
 private:
     void onExit(wxCommandEvent &event);
     void onAbout(wxCommandEvent &event);
-    void onClear(wxCommandEvent &event);
-    void onGuess(wxCommandEvent &event);
 
     wxGridSizer *numberGrid;
     DrawPane *drawPane;
@@ -22,8 +20,24 @@ private:
     wxButton *clearButton;
     wxFont *textFont;
 
+    //for drawing
+    void onClear(wxCommandEvent &event);
+    void onGuess(wxCommandEvent &event);
+
     enum {CLEAR_ID = wxID_HIGHEST + 98};
     enum {GUESS_ID = wxID_HIGHEST + 99};
+
+    //for training the neural network
+    void onZero(wxCommandEvent &event);
+    void onOne(wxCommandEvent &event);
+    void onTwo(wxCommandEvent &event);
+    void onThree(wxCommandEvent &event);
+    void onFour(wxCommandEvent &event);
+    void onFive(wxCommandEvent &event);
+    void onSix(wxCommandEvent &event);
+    void onSeven(wxCommandEvent &event);
+    void onEight(wxCommandEvent &event);
+    void onNine(wxCommandEvent &event);
 
 DECLARE_EVENT_TABLE();
 };
