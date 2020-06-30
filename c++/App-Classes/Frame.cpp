@@ -1,5 +1,6 @@
 #include "Frame.h"
 #include <string>
+#include <iostream>
 
 Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame(NULL, wxID_ANY, title, pos, size) {
     //standard menu components
@@ -81,14 +82,14 @@ void Frame::onClear(wxCommandEvent& event) {
 void Frame::onGuess(wxCommandEvent& event) {
     wxWindowDC windowDC(drawPane);
     unsigned int pixelArray[drawPane->GetSize().GetWidth() * drawPane->GetSize().GetHeight()];
+    wxColour *colorPtr = new wxColour;
     for (int x = 0; x < drawPane->GetSize().GetWidth(); x++) {
         for (int y = 0; y < drawPane->GetSize().GetHeight(); y++) {
-            wxColour color;
-            wxColour *colorPtr = &color;
-            windowDC.GetPixel(0, 0, colorPtr);
+            windowDC.GetPixel(x, y, colorPtr);
             pixelArray[x * 300 + y] = colorPtr->GetRGB();
         }
     }
+    delete colorPtr;
 }
 
 //mapping ids to frame events

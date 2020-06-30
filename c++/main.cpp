@@ -71,11 +71,11 @@ int output_main() {
         while (getline(parameters, line)) {
             if (line.empty() || line == "end") {
                 if (!top.empty()) {
-                    for (auto& i : carriage) {
-                        i->set_receivers(top);
+                    for (auto& node : carriage) {
+                        node->set_receivers(top);
                     }
-                    for (auto& i : top) {
-                        i->set_senders(carriage);
+                    for (auto& node : top) {
+                        node->set_senders(carriage);
                     }
                 }
                 top = carriage;
@@ -103,23 +103,23 @@ int output_main() {
 
     //retrieve inputs from GUI
     //get_inputs(); TODO (Simon)
-    for (auto& i : top) {
-        i->set_input(1); //test values
+    for (auto& node : top) {
+        node->set_input(1); //test values
     }
 
     //feed forwards
     while (!top[0]->is_last()) {
-        for (auto& i : top) {
-            i->compute(sigma);
+        for (auto& node : top) {
+            node->compute(sigma);
         }
         top = top[0]->receiver_ptrs();
     }
 
     //get result
     std::vector<double> confidences;
-    for (auto& i : top) {
-        i->compute(sigma);
-        confidences.push_back(i->get_output());
+    for (auto& node : top) {
+        node->compute(sigma);
+        confidences.push_back(node->get_output());
     }
     std::cout << "Results: ";
     print_iterable(confidences);
