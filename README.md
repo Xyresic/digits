@@ -10,20 +10,15 @@ Eric Lam - C++20 (CNN)
 Simon Wu - C++20 (GUI)  
 ## Dependencies
 wxWidgets 3.1.3
-## Compiling Instructions
-To compile with the source code, the user should have CMake 3.17.3 or earlier. You should place the FULL path to wxWidgets, e.g., `C:\wxWidgets-3.1.3` in a User Variable called `WXWIN` in your environment variables. 
+## Launch Codes
+Prerequisites: CMake 3.17.3, wxWidgets 3.1.3  
+If CMake can't find wxWidgets, either move wxWidgets into C:/ or set the wxWidgets_ROOT_DIR and wxWidgets_LIB_DIR environment variables.
 
-If you are using MinGW, please run this CMake command in the base project directory in the command prompt:
+**MinGW:**  
+Run the following commands in the root of the project directory
 ```
-cmake <your project directory path> -G "MinGW Makefiles"
-```
-This creates a folder and a series of files. The important one is the makefile, which can be used with MinGW. If you are using a different compiler, please use `cmake --help` and scroll to the "Generators" section to locate the appropriate one. 
-
-To compile the executable using the makefile, run this command:
-```
+cmake <absolute path to project directory> -G "MinGW Makefiles"
 mingw32-make 
-```
-digits.exe should be in the directory now. Run it using:
-```
 ./digits.exe
 ```
+For other compilers, run `cmake --help` and scroll to the "Generators" section to locate the appropriate generator.
