@@ -64,3 +64,10 @@
 
 # cmake-debug
 cmake-build-debug/
+
+# standalone cmake compile files
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+*.cbp
