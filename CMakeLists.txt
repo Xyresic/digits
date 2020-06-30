@@ -4,6 +4,7 @@ project(digits)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(wxWidgets_ROOT_DIR C:/wxWidgets-3.1.3)
 find_package(wxWidgets REQUIRED COMPONENTS net core base)
 include(${wxWidgets_USE_FILE})
 
