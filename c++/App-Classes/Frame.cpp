@@ -80,7 +80,6 @@ void Frame::onClear(wxCommandEvent& event) {
 }
 
 void Frame::onGuess(wxCommandEvent& event) {
-    wxWindowDC windowDC(drawPane);
     unsigned int pixelArray[drawPane->GetSize().GetWidth() * drawPane->GetSize().GetHeight()];
     wxColour *colorPtr = new wxColour;
     for (int x = 0; x < drawPane->GetSize().GetWidth(); x++) {
@@ -92,10 +91,61 @@ void Frame::onGuess(wxCommandEvent& event) {
     delete colorPtr;
 }
 
+void Frame::onZero(wxCommandEvent &event) {
+
+}
+
+void Frame::onOne(wxCommandEvent &event) {
+
+}
+
+void Frame::onTwo(wxCommandEvent &event) {
+
+}
+
+void Frame::onThree(wxCommandEvent &event) {
+
+}
+
+void Frame::onFour(wxCommandEvent &event) {
+
+}
+
+void Frame::onFive(wxCommandEvent &event) {
+
+}
+
+void Frame::onSix(wxCommandEvent &event) {
+
+}
+
+void Frame::onSeven(wxCommandEvent &event) {
+
+}
+
+void Frame::onEight(wxCommandEvent &event) {
+
+}
+
+void Frame::onNine(wxCommandEvent &event) {
+
+}
+
+
 //mapping ids to frame events
 BEGIN_EVENT_TABLE(Frame, wxFrame)
     EVT_MENU(wxID_EXIT, Frame::onExit)
     EVT_MENU(wxID_ABOUT, Frame::onAbout)
     EVT_BUTTON(CLEAR_ID, Frame::onClear)
     EVT_BUTTON(GUESS_ID, Frame::onGuess)
+    EVT_BUTTON(wxID_HIGHEST + 100, Frame::onZero)
+    EVT_BUTTON(wxID_HIGHEST + 101, Frame::onOne)
+    EVT_BUTTON(wxID_HIGHEST + 102, Frame::onTwo)
+    EVT_BUTTON(wxID_HIGHEST + 103, Frame::onThree)
+    EVT_BUTTON(wxID_HIGHEST + 104, Frame::onFour)
+    EVT_BUTTON(wxID_HIGHEST + 105, Frame::onFive)
+    EVT_BUTTON(wxID_HIGHEST + 106, Frame::onSix)
+    EVT_BUTTON(wxID_HIGHEST + 107, Frame::onSeven)
+    EVT_BUTTON(wxID_HIGHEST + 108, Frame::onEight)
+    EVT_BUTTON(wxID_HIGHEST + 109, Frame::onNine)
 END_EVENT_TABLE()
