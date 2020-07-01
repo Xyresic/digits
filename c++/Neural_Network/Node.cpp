@@ -58,8 +58,8 @@ void Node::descend(const std::function<double(double)>& derivative, double expec
 }
 
 void Node::descend(const std::function<double (double)> &derivative, int index) {
-    for (auto& i : receivers) {
-        del_b += i->del_b * i->weights[index] * lin_comb;
+    for (auto& node : receivers) {
+        del_b += node->del_b * node->weights[index] * derivative(lin_comb);
     }
     for (int i = 0; i < senders.size(); i++) {
         del_w.push_back(del_b * senders[i]->output);
