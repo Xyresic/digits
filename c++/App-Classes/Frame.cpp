@@ -103,7 +103,7 @@ void Frame::onGuess(wxCommandEvent& event) {
         }
     }
     delete colorPtr;
-    run_network(pixelArray);
+    guessText->SetLabel("Guess: " + std::to_string(run_network(pixelArray)));
 }
 
 void reset_expected() {

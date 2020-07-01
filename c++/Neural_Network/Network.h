@@ -4,7 +4,7 @@
 #include <vector>
 
 void initialize_network();
-void run_network(double* inputs);
+int run_network(double* inputs);
 void descend_gradient(std::vector<double> expected);
 
 #endif //DIGITS_NETWORK_H

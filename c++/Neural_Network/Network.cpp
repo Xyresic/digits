@@ -100,7 +100,7 @@ void initialize_network() {
     parameters.close();
 }
 
-void run_network(double* inputs) {
+int run_network(double* inputs) {
     top.clear();
     confidences.clear();
 
@@ -159,7 +159,7 @@ void run_network(double* inputs) {
     }
     std::cout << "Results: ";
     print_iterable(confidences);
-    std::cout << vec_index(confidences, *max_element(confidences.begin(), confidences.end())) << std::endl;
+    return vec_index(confidences, *max_element(confidences.begin(), confidences.end()));
 }
 
 void descend_gradient(std::vector<double> expected) {
