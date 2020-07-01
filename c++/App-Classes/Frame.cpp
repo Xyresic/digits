@@ -1,6 +1,8 @@
-#include "Frame.h"
 #include <string>
 #include <iostream>
+
+#include "Frame.h"
+#include "../Neural_Network/Network.h"
 
 Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame(NULL, wxID_ANY, title, pos, size) {
     //standard menu components
@@ -80,15 +82,25 @@ void Frame::onClear(wxCommandEvent& event) {
 }
 
 void Frame::onGuess(wxCommandEvent& event) {
-    unsigned int pixelArray[drawPane->GetSize().GetWidth() * drawPane->GetSize().GetHeight()];
+    int width = drawPane->GetSize().GetWidth() / 10;
+    int height = drawPane->GetSize().GetHeight() / 10;
+    double pixelArray[width * height];
     wxColour *colorPtr = new wxColour;
-    for (int x = 0; x < drawPane->GetSize().GetWidth(); x++) {
-        for (int y = 0; y < drawPane->GetSize().GetHeight(); y++) {
-            windowDC.GetPixel(x, y, colorPtr);
-            pixelArray[x * 300 + y] = colorPtr->GetRGB();
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            double sum = 0;
+            for (int x = j * 10; x < j * 10 + 10; x++) {
+                for (int y = i * 10; y < i * 10 + 10; y++) {
+                    drawPane->drawDC.GetPixel(x, y, colorPtr);
+                    sum += colorPtr->GetRGB();
+                }
+            }
+            sum = (15790320 - (sum / 100)) / 15790320;
+            pixelArray[i * width + j] = sum;
         }
     }
     delete colorPtr;
+    run_network(pixelArray);
 }
 
 void Frame::onZero(wxCommandEvent &event) {
