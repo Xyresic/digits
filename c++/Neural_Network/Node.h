@@ -34,6 +34,7 @@ class Node {
         ~Node() = default;
 
         double get_output() {return output;}
+        std::vector<double> get_weights() {return weights;}
         Parameters get_new_params();
         std::vector<std::shared_ptr<Node>> receiver_ptrs() {return receivers;}
         std::vector<std::shared_ptr<Node>> sender_ptrs() {return senders;}
@@ -42,6 +43,7 @@ class Node {
         void set_senders(const std::vector<std::shared_ptr<Node>>& senders);
         void set_receivers(const std::vector<std::shared_ptr<Node>>& receivers);
 
+        bool is_first();
         bool is_last();
         void compute(const std::function<double(double)>& activator);
         void descend(const std::function<double(double)>& derivative, double expected);

@@ -1,6 +1,11 @@
-#include "Frame.h"
 #include <string>
 #include <iostream>
+#include <vector>
+
+#include "Frame.h"
+#include "../Neural_Network/Network.h"
+
+std::vector<double> expected;
 
 Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame(NULL, wxID_ANY, title, pos, size) {
     //standard menu components
@@ -80,55 +85,92 @@ void Frame::onClear(wxCommandEvent& event) {
 }
 
 void Frame::onGuess(wxCommandEvent& event) {
-    unsigned int pixelArray[drawPane->GetSize().GetWidth() * drawPane->GetSize().GetHeight()];
+    int width = drawPane->GetSize().GetWidth() / 10;
+    int height = drawPane->GetSize().GetHeight() / 10;
+    double pixelArray[width * height];
     wxColour *colorPtr = new wxColour;
-    for (int x = 0; x < drawPane->GetSize().GetWidth(); x++) {
-        for (int y = 0; y < drawPane->GetSize().GetHeight(); y++) {
-            windowDC.GetPixel(x, y, colorPtr);
-            pixelArray[x * 300 + y] = colorPtr->GetRGB();
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            double sum = 0;
+            for (int x = j * 10; x < j * 10 + 10; x++) {
+                for (int y = i * 10; y < i * 10 + 10; y++) {
+                    drawPane->drawDC.GetPixel(x, y, colorPtr);
+                    sum += colorPtr->GetRGB();
+                }
+            }
+            sum = (15790320 - (sum / 100)) / 15790320;
+            pixelArray[i * width + j] = sum;
         }
     }
     delete colorPtr;
+    run_network(pixelArray);
+}
+
+void reset_expected() {
+    expected.clear();
+    for (int i = 0; i < 10; i++) {
+        expected.push_back(0);
+    }
 }
 
 void Frame::onZero(wxCommandEvent &event) {
-
+    reset_expected();
+    expected[0] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onOne(wxCommandEvent &event) {
-
+    reset_expected();
+    expected[1] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onTwo(wxCommandEvent &event) {
-
+    reset_expected();
+    expected[2] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onThree(wxCommandEvent &event) {
-
+    reset_expected();
+    expected[3] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onFour(wxCommandEvent &event) {
-
+    reset_expected();
+    expected[4] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onFive(wxCommandEvent &event) {
-
+    reset_expected();
+    expected[5] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onSix(wxCommandEvent &event) {
-
+    reset_expected();
+    expected[6] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onSeven(wxCommandEvent &event) {
-
+    reset_expected();
+    expected[7] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onEight(wxCommandEvent &event) {
-
+    reset_expected();
+    expected[8] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onNine(wxCommandEvent &event) {
-
+    reset_expected();
+    expected[9] = 1;
+    descend_gradient(expected);
 }
 
 
