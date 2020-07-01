@@ -101,6 +101,9 @@ void initialize_network() {
 }
 
 void run_network(double* inputs) {
+    top.clear();
+    confidences.clear();
+
     std::ifstream parameters(path);
     std::vector<std::shared_ptr<Node>> carriage;
     std::string line;
