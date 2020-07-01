@@ -8,10 +8,10 @@ Node::Node(const std::vector<double>& weights, double bias) {
 }
 
 Parameters Node::get_new_params() {
-    double new_bias = bias + del_b / (abs(del_b) > 1? 2 * abs(del_b):1);
+    double new_bias = bias + del_b / (abs(del_b) > 0.5? 2 * abs(del_b):1);
     std::vector<double> new_weights;
     for (int i = 0; i < weights.size(); i++) {
-        new_weights.push_back(weights[i] + del_w[i] / (abs(del_w[i]) > 1? 2 * abs(del_w[i]):1));
+        new_weights.push_back(weights[i] + del_w[i] / (abs(del_w[i]) > 0.5? 2 * abs(del_w[i]):1));
     }
     Parameters new_params = {new_bias, new_weights};
     return new_params;
