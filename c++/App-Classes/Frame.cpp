@@ -1,8 +1,11 @@
 #include <string>
 #include <iostream>
+#include <vector>
 
 #include "Frame.h"
 #include "../Neural_Network/Network.h"
+
+std::vector<double> expected;
 
 Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame(NULL, wxID_ANY, title, pos, size) {
     //standard menu components
@@ -101,46 +104,59 @@ void Frame::onGuess(wxCommandEvent& event) {
     }
     delete colorPtr;
     run_network(pixelArray);
+    for (int i = 0; i < 10; i++) {
+        expected.push_back(0);
+    }
 }
 
 void Frame::onZero(wxCommandEvent &event) {
-
+    expected[0] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onOne(wxCommandEvent &event) {
-
+    expected[1] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onTwo(wxCommandEvent &event) {
-
+    expected[2] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onThree(wxCommandEvent &event) {
-
+    expected[3] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onFour(wxCommandEvent &event) {
-
+    expected[4] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onFive(wxCommandEvent &event) {
-
+    expected[5] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onSix(wxCommandEvent &event) {
-
+    expected[6] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onSeven(wxCommandEvent &event) {
-
+    expected[7] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onEight(wxCommandEvent &event) {
-
+    expected[8] = 1;
+    descend_gradient(expected);
 }
 
 void Frame::onNine(wxCommandEvent &event) {
-
+    expected[9] = 1;
+    descend_gradient(expected);
 }
 
 

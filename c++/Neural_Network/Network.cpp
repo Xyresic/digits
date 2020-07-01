@@ -31,7 +31,7 @@ double cost(const std::vector<double>& results, const std::vector<double>& expec
 std::string path = ".\\params.dat";
 
 std::default_random_engine engine;
-std::uniform_real_distribution<double> distribution(-10.0, 10.0);
+std::uniform_real_distribution<double> distribution(-0.5, 0.5);
 
 std::vector<double> confidences;
 std::vector<std::shared_ptr<Node>> top;
@@ -87,11 +87,11 @@ void initialize_layer(std::ofstream& file, int nodes, int weights) {
 void initialize_network() {
     std::ofstream parameters(path);
     if (parameters.is_open()) {
-        initialize_layer(parameters, 10, 30);
+        initialize_layer(parameters, 10, 10);
         parameters << '\n';
-        initialize_layer(parameters, 30, 150);
+        initialize_layer(parameters, 10, 100);
         parameters << '\n';
-        initialize_layer(parameters, 150, 900);
+        initialize_layer(parameters, 100, 900);
         parameters << "end";
     } else {
         std::cout << "Unable to open file." << std::endl;
